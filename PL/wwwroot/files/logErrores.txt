@@ -1,0 +1,1 @@
+No se insertó el usuario con nombre: Olegario Error: Error al registrar el usuarios

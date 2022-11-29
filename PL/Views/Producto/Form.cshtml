@@ -1,0 +1,158 @@
+﻿@model ML.Producto
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Información del producto</h2>
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("Form", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6" style="display: none">
+                                @Html.LabelFor(model => model.IdProducto, new { @class = "hidden" })
+                                @Html.TextBoxFor(model => model.IdProducto, new { @class = "hidden form-control" })
+                                @Html.ValidationMessageFor(model => model.IdProducto)
+                            </div>
+                            <div class="col-md-3" style="padding: 5px;">
+                                @Html.LabelFor(model => model.Nombre, new { @style = "background-color: lightskyblue; border-radius: 8px 8px 0 0; width: 80%; text-align: center; margin: 0; text-transform: uppercase;" })
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" style="background-color: transparent;"><i class="bi bi-person-circle"></i></span>
+                                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombreProd", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="padding: 5px;">
+                                @Html.LabelFor(model => model.PrecioUnitario, new { @style = "background-color: lightskyblue; border-radius: 8px 8px 0 0; width: 80%; text-align: center; margin: 0; text-transform: uppercase;" })
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" style="background-color: transparent;"><i class="bi bi-person-circle"></i></span>
+                                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtPrecioUnitario", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(model => model.PrecioUnitario, null, new { @class = "text-danger"})
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="padding: 5px;">
+                                @Html.LabelFor(model => model.Stock, new { @style = "background-color: lightskyblue; border-radius: 8px 8px 0 0; width: 80%; text-align: center; margin: 0; text-transform: uppercase;" })
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" style="background-color: transparent;"><i class="bi bi-person-circle"></i></span>
+                                    @Html.TextBoxFor(model => model.Stock, new { @class = "form-control", @id = "txtStock", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(model => model.Stock, null, new { @class = "text-danger"})
+                                </div>
+                            </div>
+                            <div class="col-md-5" style="padding: 5px;">
+                                @Html.LabelFor(model => model.Descripcion, new { @style = "background-color: lightskyblue; border-radius: 8px 8px 0 0; width: 80%; text-align: center; margin: 0; text-transform: uppercase;" })
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" style="background-color: transparent;"><i class="bi bi-person-circle"></i></span>
+                                    @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control", @id = "txtDescripcion", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(model => model.Descripcion, null, new { @class = "text-danger"})
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.Imagen)
+                                <input name="ImagenData" type="file" class="form-control" onchange="readURL(this);" style="background-color: transparent;" />
+                                @if (Model.Imagen != null)
+                                {
+                                    <img id="ImagenProducto" src="data:image/*;base64,@Model.Imagen" style=" height:150px; width:150px; ">
+                                }
+                                else
+                                {
+                                    <img id="ImagenProducto" src="~/Imagen/ProductoSinFoto.png" style=" height:150px; width:150px; ">
+                                }
+                                @Html.ValidationMessageFor(model => model.Imagen)
+                            </div>
+                        </div>
+
+                        <h4 class="text-center">Información adicional</h4>
+                        <div class="row">
+                            <div class="col-md-4" style="padding: 5px;">
+                                @Html.LabelFor(model => model.Proveedor.IdProveedor, new { @style = "background-color: lightskyblue; border-radius: 8px 8px 0 0; width: 80%; text-align: center; margin: 0; text-transform: uppercase;" })
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" style="background-color: transparent;"><i class="bi bi-arrow-down"></i></span>
+                                    @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona una opción", new { id = "ddlProveedor", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Proveedor.IdProveedor)
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding: 5px;">
+                                @Html.LabelFor(model => model.Departamento.Area.IdArea, new { @style = "background-color: lightskyblue; border-radius: 8px 8px 0 0; width: 80%; text-align: center; margin: 0; text-transform: uppercase;" })
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" style="background-color: transparent;"><i class="bi bi-arrow-down"></i></span>
+                                    @Html.DropDownListFor(model => model.Departamento.Area.IdArea, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Selecciona una opción", new { id = "ddlArea", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Departamento.Area.IdArea)
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding: 5px;">
+                                @Html.LabelFor(model => model.Departamento.Departamentos, new { @style = "background-color: lightskyblue; border-radius: 8px 8px 0 0; width: 80%; text-align: center; margin: 0; text-transform: uppercase;" })
+                                @if (Model.Departamento.Departamentos == null)
+                                {
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" style="background-color: transparent;"><i class="bi bi-arrow-down"></i></span>
+                                        @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(string.Empty, "Value", "Text"), "Seleciona una opción", htmlAttributes: new { id = "ddlDepartamento", @class = "form-control" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" style="background-color: transparent;"><i class="bi bi-arrow-down"></i></span>
+                                        @Html.DropDownListFor(model => model.Departamento.IdDepartamento, new SelectList(Model.Departamento.Departamentos, "IdDepartamento", "Nombre"), "Seleciona una opción", htmlAttributes: new { id = "ddlDepartamento", @class = "form-control" })
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3" style="padding: 5px;">
+                                <input type="submit" value="Guardar" class="btn btn-success" style="margin: 22px;" />
+                                @Html.ActionLink("Regresar", "GetAll", "Producto", htmlAttributes: new { @class = "btn btn-danger" })
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.material.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ddlArea").change(function () {
+                $("#ddlDepartamento").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetDepartamento")',
+                    dataType: 'json',
+                    data: { IdArea: $("#ddlArea").val() },
+                    success: function (departamentos) {
+                        $("#ddlDepartamento").append('<option value="0">' + 'Seleccione una opción' + '</option>');
+                        $.each(departamentos, function (i, departamentos) {
+                            $("#ddlDepartamento").append('<option value="'
+                                + departamentos.idDepartamento + '">'
+                                + departamentos.nombre + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed.' + ex);
+                    }
+                });
+            });
+        });
+    </script>
+
+}
+
