@@ -29,7 +29,7 @@ namespace SL.Controllers
                 return NotFound();
             }
         }
-
+        
         [HttpPost("GetAll")]
         public IActionResult GetAll(ML.Usuario usuario)
         {
@@ -46,26 +46,26 @@ namespace SL.Controllers
             }
         }
 
-        // GET api/<UsuarioController>/5
-        //[HttpGet("GetById/{idUsuario}")]
-        //public string Get(int idUsuario)
-        //{
-        //    ML.Usuario usuario = new ML.Usuario();
-        //    usuario.Rol = new ML.Rol();
-        //    ML.Result result = BL.Usuario.GetById(idUsuario);
+        //GET api/<UsuarioController>/5
+        [HttpGet("GetById/{idUsuario}")]
+        public IActionResult Get(int idUsuario)
+        {
+            ML.Usuario usuario = new ML.Usuario();
+            usuario.Rol = new ML.Rol();
+            ML.Result result = BL.Usuario.GetById(idUsuario);
 
-        //    if (result.Correct)
-        //    {
-        //        return ();
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
         // POST api/<UsuarioController>
-        [HttpPost]
+        [HttpPost("Add")]
         public void Post([FromBody] string value)
         {
         }
