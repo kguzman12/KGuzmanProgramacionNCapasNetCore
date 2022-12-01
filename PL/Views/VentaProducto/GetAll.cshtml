@@ -22,16 +22,14 @@
                         <img src="~\Imagen\UsuarioSinFoto.png" style=" height:50%; width:100%;">
                     }
                     <div class="card-body" style="padding: 3px !important;">
-                        <h5 class="card-title card-header text-center bg-secondary" id="pNombre" style="background-color:lightsalmon!important; border-radius:10px; font-weight: bolder; font-family: monospace;   text-transform: uppercase;font-size: 16px;}">
+                        <h5 class="card-title card-header text-center bg-secondary" id="pNombre" style="background-color:lightskyblue!important; border-radius:10px; font-weight: bolder; font-family: monospace;   text-transform: uppercase;font-size: 16px;}">
                             @producto.Nombre @producto.Descripcion
                         </h5>
                         <p class="card-text" id="pIdProducto" style="display: none">@producto.IdProducto</p>
                         <p class="card-text" id="pPrecioUnitario" style="color: black">Precio unitario: @producto.PrecioUnitario</p>
-                        <p class="card-text" id="pStrock" style="color: black">Stock: @producto.Stock</p>
-                        <p class="card-text" id="pProveedor" style="color: black">Proveedor: @producto.Proveedor.Nombre</p>
-                        <p class="card-text" id="pDepartamento" style="color: black">Departamento: @producto.Departamento.Nombre</p>
+                        <p class="card-text" id="pProveedor" style="color: black">Marca: @producto.Proveedor.Nombre</p>
 
-                        <a href="@Url.Action("CardPost", "VentaProducto", new{})"></a>
+                        <a class="btn btn-info" href="@Url.Action("CardPost", "VentaProducto", new{IdProducto = producto.IdProducto, Nombre = producto.Nombre, Descripcion = producto.Descripcion, PrecioUnitario = producto.PrecioUnitario, Stock = producto.Stock})">Agregar <i class="bi bi-cart4"></i></a>
                     </div>
                 </div>
             </div>

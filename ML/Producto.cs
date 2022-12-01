@@ -22,5 +22,9 @@ namespace ML
         public ML.Proveedor Proveedor { get; set; } 
         public ML.Departamento Departamento { get; set; }
 
+    //Agregadas
+        public int Cantidad { get; set; }
+        public int Total { get; set; }
+
     }
 }

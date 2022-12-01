@@ -1,0 +1,93 @@
+﻿@model ML.VentaProducto
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Context.Session.GetString("Producto") == null)
+{
+    <h2>El Carrito esta vacio</h2>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Vuelve al catalogo para agregar productos al carrito</h5>
+            <hr />
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div style="float:right">
+                    @Html.ActionLink("Volver al catálogo", "GetAll", "VentaProducto", htmlAttributes: new { @class = "btn btn-success" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else{
+    <h2 class="text-center">Resumen de compra</h2>
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div style="float:right">
+                @Html.ActionLink("Volver al catálogo", "GetAll", "VentaProducto", htmlAttributes: new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-bordered table-responsive">
+                <thead style="background-color: #aec1ff;font-family: arial;font-size: 1.2rem;">
+                    <tr>
+                        <td style="display :none;">id</td>
+                        <td></td>
+                        <td style="text-align: center;">Nombre</td>
+                        <td style ="text-align: center;">Precio</td>
+                        <td style="text-align: center;">Stock</td>
+                        <td style="text-align: center; vertical-align: middle;">Añadir</td>
+                        <td style="text-align: center; vertical-align: middle;">Cantidad</td>
+                        <td style="text-align: center; vertical-align: middle;">Quitar</td>
+                        <td style="text-align: center; vertical-align: middle;">Eliminar</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.Producto producto in Model.VentasProductos)
+                    {
+                        <tr>
+                            <td style="display :none;">@producto.IdProducto </td>
+                            @if (producto.Imagen != null)
+                            {
+                                <td style="text-align: center; vertical-align: middle;"><img src="data:image/*;base64,@producto.Imagen" style=" height:100px; width:100px; "></td>
+                            }
+                            else
+                            {
+                                <td style="text-align: center; vertical-align: middle;"><img src="~/Imagen/ProductoSinFoto.jpg" style=" height:100px; width:100px;"></td>
+                            }
+                            <td style="text-align: center; vertical-align: middle;">@producto.Nombre (@producto.Descripcion)</td>
+                            <td style="text-align: center; vertical-align: middle;">$@producto.PrecioUnitario</td>
+                            <td style="text-align: center; vertical-align: middle;">@producto.Stock</td>
+                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-success " href="@Url.Action("CardPost", "Producto", new { IdProducto = producto.IdProducto})"><i class="bi bi-plus-circle-fill" style="color: mintcream"></i></a></td>
+                            <td style="text-align: center; vertical-align: middle;">@producto.Cantidad</td>
+                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-success " href="@Url.Action("Delete", "Producto", new { IdProducto = producto.IdProducto})"><i class="bi bi-dash" style="color: mintcream"></i></a></td>
+                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger" href="@Url.Action("Delete", "Producto", new { IdProducto = producto.IdProducto})" onclick="return confirm('Estas seguro que deseas eliminar este producto?');"><i class="bi bi-x-square-fill" style="color: mintcream"></i></a></td>
+                        </tr>
+                        <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total:</td>
+                        <td>$@producto.Total</td>
+                    </tr>
+                    }
+                    
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+}

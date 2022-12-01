@@ -142,6 +142,7 @@ namespace BL
                         usuario.Celular = query.Celular;
                         usuario.Curp = query.Curp;
                         usuario.Imagen = query.Imagen;
+                        usuario.Status = (bool)query.Status;
 
                         usuario.Rol = new ML.Rol();
                         usuario.Rol.IdRol = query.IdRol.Value;

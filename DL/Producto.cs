@@ -26,9 +26,12 @@ public partial class Producto
     public virtual Proveedor? IdProveedorNavigation { get; set; }
 
 
-//Agregadas proveedor
+//propiedades producto
     public string? NombreProveedor { get; set; }
     public string? Telefono { get; set; }
 
     public string? NombreDepartamento { get; set; }
+
+    public int IdArea { get; set; }
+    public string? NombreArea { get; set; }
 }

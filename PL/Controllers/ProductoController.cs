@@ -136,8 +136,29 @@ namespace PL.Controllers
             return PartialView("Modal");
         }
 
-       
-    //Metodos usados en json de ajax
+        [HttpGet]
+        public ActionResult Delete(int idProducto)
+        {
+            if (idProducto >= 1)
+            {
+                ML.Result result = BL.Producto.Delete(idProducto);
+
+                if (result.Correct)
+                {
+                    ViewBag.Message = result.Message;
+                }
+                else
+                {
+                    ViewBag.Message = "Error al consultar el producto seleccionado";
+                }
+
+            }
+            return PartialView("Modal");
+
+        }
+
+
+        //Metodos usados en json de ajax
         public JsonResult GetDepartamento(int idArea)
         {
             var result = BL.Departamento.DepartamentoGetByIdArea(idArea);

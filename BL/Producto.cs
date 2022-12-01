@@ -118,6 +118,10 @@ namespace BL
                         producto.Departamento.IdDepartamento = (byte)query.IdDepartamento;
                         producto.Departamento.Nombre = query.NombreDepartamento;
 
+                        producto.Departamento.Area = new ML.Area();
+                        producto.Departamento.Area.IdArea = (byte)query.IdArea;
+                        producto.Departamento.Area.Nombre = query.NombreArea;
+
                         result.Object = producto;
                     }
                 }
