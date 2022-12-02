@@ -8,7 +8,6 @@ namespace SL.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        // GET: api/<UsuarioController>
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
@@ -29,11 +28,18 @@ namespace SL.Controllers
                 return NotFound();
             }
         }
-        
+                              
         [HttpPost("GetAll")]
-        public IActionResult GetAll(ML.Usuario usuario)
+        public IActionResult GetAll(string nombre, string apellidoPaterno)
         {
+            ML.Usuario usuario = new ML.Usuario();
+
+            usuario.Nombre = (usuario.Nombre == null) ? "" : nombre;
+            usuario.ApellidoPaterno = (usuario.ApellidoPaterno == null) ? "" : apellidoPaterno;
+
             usuario.Rol = new ML.Rol();
+            usuario.Direccion = new ML.Direccion();
+
             ML.Result result = BL.Usuario.GetAll(usuario);
 
             if (result.Correct)
@@ -46,9 +52,8 @@ namespace SL.Controllers
             }
         }
 
-        //GET api/<UsuarioController>/5
         [HttpGet("GetById/{idUsuario}")]
-        public IActionResult Get(int idUsuario)
+        public IActionResult GetById(int idUsuario)
         {
             ML.Usuario usuario = new ML.Usuario();
             usuario.Rol = new ML.Rol();
@@ -64,22 +69,62 @@ namespace SL.Controllers
             }
         }
 
-        // POST api/<UsuarioController>
         [HttpPost("Add")]
-        public void Post([FromBody] string value)
+        public IActionResult Add([FromBody] ML.Usuario usuario)
         {
+            ML.Result result = BL.Usuario.Add(usuario);
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
         }
 
-        // PUT api/<UsuarioController>/5
+        [HttpPost("Update")]
+        public IActionResult Update([FromBody] ML.Usuario usuario)
+        {
+            ML.Result result = BL.Usuario.Update(usuario);
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<UsuarioController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpGet("Delete/{idUsuario}")]
+        public IActionResult Delete(int idUsuario)
         {
+            ML.Result result = BL.Usuario.Delete(idUsuario);
+
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
+
+
+        // DELETE api/<UsuarioController>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

@@ -6,7 +6,7 @@ namespace ML
     public class Usuario
     {
         public int IdUsuario { get; set; }
-        [Required]
+        //[Required]
         public string Nombre { get; set; }
         [DisplayName("Apellido Paterno")]
         public string ApellidoPaterno { get; set; }

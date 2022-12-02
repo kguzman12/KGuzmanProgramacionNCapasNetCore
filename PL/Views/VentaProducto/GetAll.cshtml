@@ -10,29 +10,28 @@
     <div class="row">
         @foreach (ML.Producto producto in Model.Productos)
         {
-            <div class="col mt-3 pt-3">
-                <div class="card text-white bg-gradient mb-3 border-4" style="width: 15rem; border: transparent;">
-                    <img src="" class="card-img-top">
+            <div class="col-md-3">
+                <div class="card" style="width: 18rem;">
                     @if (producto.Imagen != null)
                     {
-                        <img src="data:image/*;base64,@producto.Imagen" style=" height:50%; width:100%;">
+                        <img src="data:image/*;base64,@producto.Imagen" class="card-img-top" style=" height:50%; width:100%;">
                     }
                     else
                     {
-                        <img src="~\Imagen\UsuarioSinFoto.png" style=" height:50%; width:100%;">
+                        <img src="~\Imagen\UsuarioSinFoto.png" class="card-img-top" style=" height:50%; width:100%;">
                     }
-                    <div class="card-body" style="padding: 3px !important;">
-                        <h5 class="card-title card-header text-center bg-secondary" id="pNombre" style="background-color:lightskyblue!important; border-radius:10px; font-weight: bolder; font-family: monospace;   text-transform: uppercase;font-size: 16px;}">
-                            @producto.Nombre @producto.Descripcion
-                        </h5>
+                   
+                    <div class="card-body">
+                        <h6>@producto.Nombre @producto.Descripcion</h6>
                         <p class="card-text" id="pIdProducto" style="display: none">@producto.IdProducto</p>
                         <p class="card-text" id="pPrecioUnitario" style="color: black">Precio unitario: @producto.PrecioUnitario</p>
                         <p class="card-text" id="pProveedor" style="color: black">Marca: @producto.Proveedor.Nombre</p>
 
-                        <a class="btn btn-info" href="@Url.Action("CardPost", "VentaProducto", new{IdProducto = producto.IdProducto, Nombre = producto.Nombre, Descripcion = producto.Descripcion, PrecioUnitario = producto.PrecioUnitario, Stock = producto.Stock})">Agregar <i class="bi bi-cart4"></i></a>
+                        <a class="btn btn-primary" href="@Url.Action("CardPost", "VentaProducto", new{IdProducto = producto.IdProducto, Nombre = producto.Nombre, Descripcion = producto.Descripcion, PrecioUnitario = producto.PrecioUnitario, Stock = producto.Stock})">Agregar <i class="bi bi-cart4"></i></a>
                     </div>
                 </div>
             </div>
+
         }
     </div>
 </div>

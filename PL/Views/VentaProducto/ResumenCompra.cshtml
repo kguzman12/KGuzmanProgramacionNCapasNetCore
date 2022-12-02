@@ -72,7 +72,8 @@ else{
                             <td style="text-align: center; vertical-align: middle;"><a class="btn btn-success " href="@Url.Action("Delete", "Producto", new { IdProducto = producto.IdProducto})"><i class="bi bi-dash" style="color: mintcream"></i></a></td>
                             <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger" href="@Url.Action("Delete", "Producto", new { IdProducto = producto.IdProducto})" onclick="return confirm('Estas seguro que deseas eliminar este producto?');"><i class="bi bi-x-square-fill" style="color: mintcream"></i></a></td>
                         </tr>
-                        <tr>
+                    }
+                    <tr>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -80,10 +81,8 @@ else{
                         <td></td>
                         <td></td>
                         <td>Total:</td>
-                        <td>$@producto.Total</td>
+                        <td>$ </td>
                     </tr>
-                    }
-                    
                 </tbody>
             </table>
 

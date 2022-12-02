@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,63 @@ namespace PL.Controllers
 {
     public class UsuarioController : Controller
     {
+        private readonly IConfiguration _configuration;
+
+        private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment;
+
+        public UsuarioController(IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment)
+        {
+            _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
+        }
+
         [HttpGet]
         public ActionResult GetAll()
         {
-            ML.Usuario usuario = new ML.Usuario();
+            ML.Result resulRol = BL.Rol.GetAll();
             ML.Result result = new ML.Result();
-            result = BL.Usuario.GetAll(usuario);
+            ML.Usuario usuario = new ML.Usuario();
+
+            usuario.Rol = new ML.Rol();
+            resulRol.Objects = new List<object>();
+            result.Objects = new List<object>();
+
+            //result = BL.Usuario.GetAll(usuario);
+
+            try
+            {
+                string urlAPI = _configuration["UrlAPI"];
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(urlAPI);
+
+                    var responseTask = client.GetAsync("Usuario/GetAll");
+
+                    responseTask.Wait();
+
+                    var resultServicio = responseTask.Result;
+
+                    if (resultServicio.IsSuccessStatusCode)
+                    {
+                        var readTask = resultServicio.Content.ReadAsAsync<ML.Result>();
+                        readTask.Wait();
+
+                        foreach (var resultItem in readTask.Result.Objects)
+                        {
+                            ML.Usuario resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.Usuario>(resultItem.ToString());
+                            result.Objects.Add(resultItemList);
+                        }
+
+                        result.Correct = true;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.Message = ex.Message;
+            }
 
             if (result.Correct)
             {
@@ -51,6 +103,7 @@ namespace PL.Controllers
         [HttpGet]
         public ActionResult Form(int? idUsuario)
         {
+            ML.Result result = new ML.Result();
             ML.Usuario usuario = new ML.Usuario();
             usuario.Rol = new ML.Rol();
 
@@ -72,8 +125,43 @@ namespace PL.Controllers
             }
             else
             {
-                ML.Result result = BL.Usuario.GetById(idUsuario.Value);
+                //ML.Result result = BL.Usuario.GetById(idUsuario.Value);
+                try
+                {
+                    string urlAPI = System.Configuration.ConfigurationManager.AppSettings["URLapi"];
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(urlAPI);
+                        var responseTask = client.GetAsync("Usuario/GetById/" + idUsuario);
+                        responseTask.Wait();
+                        var resultAPI = responseTask.Result;
+                        if (resultAPI.IsSuccessStatusCode)
+                        {
+                            var readTask = resultAPI.Content.ReadAsAsync<ML.Result>();
+                            readTask.Wait();
 
+                            //ML.Usuario resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.Usuario>(resultItem.ToString());
+                            //result.Objects.Add(resultItemList);
+
+                            result.Correct = true;
+                        }
+                        else
+                        {
+                            result.Correct = false;
+                            result.Message = "No existen registros en la tabla Departamento";
+                        }
+
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    result.Correct = false;
+                    result.Message = ex.Message;
+
+                }
+
+                //return result;
                 if (result.Correct)
                 {
                     usuario = (ML.Usuario)result.Object;
@@ -103,6 +191,8 @@ namespace PL.Controllers
         [HttpPost]
         public ActionResult Form(ML.Usuario usuario)
         {
+            ML.Result result = new ML.Result();
+
             IFormFile image = Request.Form.Files["ImagenData"];
 
             if (image != null)
@@ -116,7 +206,24 @@ namespace PL.Controllers
             {
                 if (usuario.IdUsuario == 0)
                 {
-                    ML.Result result = BL.Usuario.Add(usuario);
+                    //ML.Result result = BL.Usuario.Add(usuario);
+                    string urlAPI = _configuration["UrlAPI"];
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(urlAPI);
+
+                        //HTTP POST
+                        var postTask = client.PostAsJsonAsync<ML.Usuario>("Usuario/Add", usuario);
+                        postTask.Wait();
+
+                        var resultPost = postTask.Result;
+                        if (resultPost.IsSuccessStatusCode)
+                        {
+                            return RedirectToAction("GetAll");
+                        }
+                    }
+
+                    //return View("GetAll");
 
                     if (result.Correct)
                     {
@@ -129,7 +236,22 @@ namespace PL.Controllers
                 }
                 else
                 {
-                    ML.Result result = BL.Usuario.Update(usuario);
+                    //ML.Result result = BL.Usuario.Update(usuario);
+                    string urlAPI = _configuration["UrlAPI"];
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(urlAPI);
+
+                        //HTTP POST
+                        var postTask = client.PostAsJsonAsync<ML.Usuario>("Usuario/update", usuario);
+                        postTask.Wait();
+
+                        var resultPost = postTask.Result;
+                        if (resultPost.IsSuccessStatusCode)
+                        {
+                            return RedirectToAction("GetAll");
+                        }
+                    }
 
                     if (result.Correct)
                     {
@@ -166,11 +288,30 @@ namespace PL.Controllers
         {
             if (idUsuario >= 1)
             {
-                ML.Result result = BL.Usuario.Delete(idUsuario);
+                //ML.Result result = BL.Usuario.Delete(idUsuario);
 
-                if (result.Correct)
+                ML.Result resultList = new ML.Result();
+                //int id = subcategoria.IdSubCategoria;
+                string urlAPI = _configuration["UrlAPI"];
+                using (var client = new HttpClient())
                 {
-                    ViewBag.Message = result.Message;
+                    client.BaseAddress = new Uri(urlAPI);
+
+                    //HTTP POST
+                    var postTask = client.GetAsync("Usuario/delete/" + idUsuario);
+                    postTask.Wait();
+
+                    var result = postTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        resultList = BL.Usuario.Delete(idUsuario);
+                        return RedirectToAction("GetAll", resultList);
+                    }
+                }
+
+                if (resultList.Correct)
+                {
+                    ViewBag.Message = resultList.Message;
                 }
                 else
                 {
