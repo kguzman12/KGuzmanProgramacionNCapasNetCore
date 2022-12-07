@@ -323,6 +323,11 @@ namespace PL.Controllers
 
         }
 
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
 
     //Metodos usados en json de ajax
         public JsonResult GetEstado(int idPais)
