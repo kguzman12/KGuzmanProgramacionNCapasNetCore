@@ -493,6 +493,7 @@ body {
     margin-bottom: 20px;
     border-radius: 20px;
     box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+    margin-top: 15px;
 }
 
     .wrapper .form-field .fas {
