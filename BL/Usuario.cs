@@ -183,6 +183,36 @@ namespace BL
             return result;
         }
 
+        public static ML.Result GetByUserName(string userName)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL.KguzmanProgramacionNcapasContext context = new DL.KguzmanProgramacionNcapasContext())
+                {
+                    var query = context.Usuarios.FromSqlRaw($"UsuarioGetByUsername {userName}").FirstOrDefault();
+
+                    if (query != null)
+                    {
+                        ML.Usuario usuario = new ML.Usuario();
+
+                        usuario.UserName = query.UserName;
+                        usuario.Password = query.Password;
+
+                        result.Object = usuario;
+                    }
+                }
+                result.Correct = true;
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
         public static ML.Result Update(ML.Usuario usuario)
         {
             ML.Result result = new ML.Result();

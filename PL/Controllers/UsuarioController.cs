@@ -329,7 +329,34 @@ namespace PL.Controllers
             return View();
         }
 
-    //Metodos usados en json de ajax
+        [HttpPost]
+        public ActionResult Login(string userName, string password)
+        {
+            ML.Result result = BL.Usuario.GetByUserName(userName);
+
+            if (result.Correct)
+            {
+                ML.Usuario usuario = new ML.Usuario();
+
+                if (usuario.Password == password)
+                {
+
+                }
+                else
+                {
+                    ViewBag.Message = "El usuario o la contraseña con incorrectos";
+                    return PartialView("Modal");
+                }
+            }
+            else
+            {
+                ViewBag.Message = "El usuario o la contraseña con incorrectos";
+                return PartialView("Modal");
+            }
+            return View();
+        }
+
+        //Metodos usados en json de ajax
         public JsonResult GetEstado(int idPais)
         {
             var result = BL.Estado.EstadoGetByIdPais(idPais);
