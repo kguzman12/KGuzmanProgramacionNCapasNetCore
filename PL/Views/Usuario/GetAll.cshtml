@@ -4,111 +4,125 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    <h2>Lista de Usuarios</h2>
-    <hr />
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] Login</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/PL.styles.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Lista de Usuarios</h2>
+            <hr />
 
-    <h4>Acciones:</h4>
-    <p><em>Para <mark>agregar</mark> haga click en el <mark>botón verde</mark></em></p>
-    <p><em>Para <mark>editar</mark> haga click en <mark>botón amarillo</mark></em></p>
-    <p><em>Para <mark>eliminar</mark> haga click en el <mark>botón rojo</mark></em></p>
+            <h4>Acciones:</h4>
+            <p><em>Para <mark>agregar</mark> haga click en el <mark>botón verde</mark></em></p>
+            <p><em>Para <mark>editar</mark> haga click en <mark>botón amarillo</mark></em></p>
+            <p><em>Para <mark>eliminar</mark> haga click en el <mark>botón rojo</mark></em></p>
 
-    <div style="float:right">
-         @Html.ActionLink("+ Agregar", "Form", "Usuario", htmlAttributes: new { @class = "btn btn-success" })
-    </div>
-    
+            <div style="float:right">
+                @Html.ActionLink("+ Agregar", "Form", "Usuario", htmlAttributes: new { @class = "btn btn-success" })
+            </div>
 
-    @using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <div class="row">
-            <div class="col-md-3">
-                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
+
+            @using (Html.BeginForm("GetAll", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Nombre" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @placeholder = "Apellido Paterno" })
+                    </div>
+                    <div class="col-md-3">
+                        <input type="submit" value="Buscar" class="btn btn-info" />
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            }
+            <hr />
+
+            <div class="row">
+                <div class="table-responsive">
+                    <table id="tableUsuarios" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th style="display:none">Id</th>
+                                <th>Nombre completo</th>
+                                <th>Fecha de nacimiento</th>
+                                <th>UserName</th>
+                                <th>Email</th>
+                                <th style="display:none">Password</th>
+                                <th>Sexo</th>
+                                <th>Teléfono</th>
+                                <th>Curp</th>
+                                <th>Dirección</th>
+                                <th style="display:none">IdRol</th>
+                                <th>Rol</th>
+                                <th>Status</th>
+                                <th></th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ML.Usuario usuario in Model.Usuarios)
+                            {
+                                <tr>
+                                    <td class="text-center"><a class="btn btn-warning" style="color: mintcream" href="@Url.Action("Form", "Usuario", new { IdUsuario = usuario.IdUsuario })"><i class="bi bi-pencil-square"></i></a></td>
+                                    <td style="display:none">@usuario.IdUsuario</td>
+                                    <td>@usuario.Nombre @usuario.ApellidoPaterno @usuario.ApellidoMaterno</td>
+                                    <td>@usuario.FechaNacimiento</td>
+                                    <td>@usuario.UserName</td>
+                                    <td>@usuario.Email</td>
+                                    <td style="display:none">@usuario.Password</td>
+                                    <td>@usuario.Sexo</td>
+                                    <td>@usuario.Telefono Celular: @usuario.Celular</td>
+                                    <td>@usuario.Curp</td>
+                                    <td>Calle: @usuario.Direccion.Calle, No.Int: @usuario.Direccion.NumeroInterior, No. Ext: @usuario.Direccion.NumeroExterior, Colonia: @usuario.Direccion.Colonia.Nombre, Municipio: @usuario.Direccion.Colonia.Municipio.Nombre, Estado: @usuario.Direccion.Colonia.Municipio.Estado.Nombre País: @usuario.Direccion.Colonia.Municipio.Estado.Pais.Nombre</td>
+                                    <td style="display:none">@usuario.Rol.IdRol</td>
+                                    <td>@usuario.Rol.Nombre</td>
+                                    @if (usuario.Status)
+                                    {
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="switchStatusUsuario" checked onchange="ChangeStatus(@usuario.IdUsuario, this)">
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="switchStatusUsuario" onchange="ChangeStatus(@usuario.IdUsuario, this)">
+                                            </div>
+                                        </td>
+                                    }
+                                    @if (usuario.Imagen != null)
+                                    {
+                                        <td><img src="data:image/*;base64,@usuario.Imagen" style=" height:100px; width:100px; "></td>
+                                    }
+                                    else
+                                    {
+                                        <td><img src="~/Imagen/UsuarioSinFoto.png" style="height:100px; width:100px;"></td>
+                                    }
+                                    <td class="text-center"><a class="btn btn-danger" href="@Url.Action("Delete", "Usuario", new { IdUsuario = usuario.IdUsuario})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-trash3" style="color: mintcream"></i></a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="col-md-3">
-                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @placeholder = "Apellido Paterno" })
-            </div>
-            <div class="col-md-3">
-                <input type="submit" value="Buscar" class="btn btn-info" />
-            </div>
-            <div class="col-md-3"></div>
         </div>
-    }
 
-    <hr />
-
-    <div class="row">
-        <div class="table-responsive">
-            <table id="tableUsuarios" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Editar</th>
-                        <th style="display:none">Id</th>
-                        <th>Nombre completo</th>
-                        <th>Fecha de nacimiento</th>
-                        <th>UserName</th>
-                        <th>Email</th>
-                        <th style="display:none">Password</th>
-                        <th>Sexo</th>
-                        <th>Teléfono</th>
-                        <th>Curp</th>
-                        <th>Dirección</th>
-                        <th style="display:none">IdRol</th>
-                        <th>Rol</th>
-                        <th>Status</th>
-                        <th></th>
-                        <th>Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (ML.Usuario usuario in Model.Usuarios)
-                    {
-                        <tr>
-                            <td class="text-center"><a class="btn btn-warning" style="color: mintcream" href="@Url.Action("Form", "Usuario", new { IdUsuario = usuario.IdUsuario })"><i class="bi bi-pencil-square"></i></a></td>
-                            <td style="display:none">@usuario.IdUsuario</td>
-                            <td>@usuario.Nombre @usuario.ApellidoPaterno @usuario.ApellidoMaterno</td>
-                            <td>@usuario.FechaNacimiento</td>
-                            <td>@usuario.UserName</td>
-                            <td>@usuario.Email</td>
-                            <td style="display:none">@usuario.Password</td>
-                            <td>@usuario.Sexo</td>
-                            <td>@usuario.Telefono Celular: @usuario.Celular</td>
-                            <td>@usuario.Curp</td>
-                            <td>Calle: @usuario.Direccion.Calle, No.Int: @usuario.Direccion.NumeroInterior, No. Ext: @usuario.Direccion.NumeroExterior, Colonia: @usuario.Direccion.Colonia.Nombre, Municipio: @usuario.Direccion.Colonia.Municipio.Nombre, Estado: @usuario.Direccion.Colonia.Municipio.Estado.Nombre País: @usuario.Direccion.Colonia.Municipio.Estado.Pais.Nombre</td>
-                            <td style="display:none">@usuario.Rol.IdRol</td>
-                            <td>@usuario.Rol.Nombre</td>
-                            @if (usuario.Status)
-                            {
-                                <td>
-                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="switchStatusUsuario" checked onchange="ChangeStatus(@usuario.IdUsuario, this)">
-                                    </div>
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="switchStatusUsuario" onchange="ChangeStatus(@usuario.IdUsuario, this)">
-                                    </div>
-                                </td>
-                            }
-                            @if (usuario.Imagen != null)
-                            {
-                                <td><img src="data:image/*;base64,@usuario.Imagen" style=" height:100px; width:100px; "></td>
-                            }
-                            else
-                            {
-                                <td><img src="~/Imagen/UsuarioSinFoto.png" style="height:100px; width:100px;"></td>
-                            }
-                            <td class="text-center"><a class="btn btn-danger" href="@Url.Action("Delete", "Usuario", new { IdUsuario = usuario.IdUsuario})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-trash3" style="color: mintcream"></i></a></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
+    </body>
+</html>
 
 @section Scripts
 {

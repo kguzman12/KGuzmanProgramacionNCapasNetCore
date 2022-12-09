@@ -291,7 +291,7 @@ namespace PL.Controllers
                 //ML.Result result = BL.Usuario.Delete(idUsuario);
 
                 ML.Result resultList = new ML.Result();
-                //int id = subcategoria.IdSubCategoria;
+                
                 string urlAPI = _configuration["UrlAPI"];
                 using (var client = new HttpClient())
                 {
@@ -332,7 +332,25 @@ namespace PL.Controllers
         [HttpPost]
         public ActionResult Login(string userName, string password)
         {
-            ML.Result result = BL.Usuario.GetByUserName(userName);
+            //ML.Result result = BL.Usuario.GetByUserName(userName);
+            ML.Result result = new ML.Result();
+
+            string urlAPI = _configuration["UrlAPI"];
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(urlAPI);
+
+                //HTTP POST
+                var postTask = client.GetAsync("Usuario/login/" + userName);
+                postTask.Wait();
+
+                var resultPost = postTask.Result;
+                if (resultPost.IsSuccessStatusCode)
+                {
+                    result = BL.Usuario.GetByUserName(userName);
+                    return RedirectToAction("GetAll", result);
+                }
+            }
 
             if (result.Correct)
             {

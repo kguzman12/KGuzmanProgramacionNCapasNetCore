@@ -4,53 +4,66 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    <h2>Lista de Departamentos</h2>
-    <hr />
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] Login</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/form.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/PL.styles.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Lista de Departamentos</h2>
+            <hr />
 
-    <h4>Acciones:</h4>
-    <p>Para agregar haga click en el boton verde</p>
-    <p>Para editar haga click en boton amarillo</p>
-    <p>Para eliminar haga click en el boton rojo</p>
+            <h4>Acciones:</h4>
+            <p>Para agregar haga click en el boton verde</p>
+            <p>Para editar haga click en boton amarillo</p>
+            <p>Para eliminar haga click en el boton rojo</p>
 
-    <div class="row">
-        <div style="float:right">
-            @Html.ActionLink("+ Agregar", "Form", "Departamento", htmlAttributes: new { @class = "btn btn-success" })
+            <div class="row">
+                <div style="float:right">
+                    @Html.ActionLink("+ Agregar", "Form", "Departamento", htmlAttributes: new { @class = "btn btn-success" })
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Editar</th>
+                                <th style="display: none">Id</th>
+                                <th>Nombre</th>
+                                <th style="display: none">IdArea</th>
+                                <th>Area</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ML.Departamento departamento in Model.Departamentos)
+                            {
+                                <tr>
+                                    <td class="text-center"><a class="btn btn-warning" href="@Url.Action("Form", "Departamento", new { IdDepartamento = departamento.IdDepartamento })"><i class="bi bi-pencil-square"></i></a></td>
+                                    <td style="display: none">@departamento.IdDepartamento</td>
+                                    <td>@departamento.Nombre</td>
+                                    <td style="display: none">@departamento.Area.IdArea</td>
+                                    <td>@departamento.Area.Nombre</td>
+                                    <td class="text-center"><a class="btn btn-danger" href="@Url.Action("Delete", "Departamento", new { IdDepartamento= departamento.IdDepartamento})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-trash3" style="color: mintcream"></i></a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <hr />
-
-    <div class="row">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Editar</th>
-                        <th style="display: none">Id</th>
-                        <th>Nombre</th>
-                        <th style="display: none">IdArea</th>
-                        <th>Area</th>
-                        <th>Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (ML.Departamento departamento in Model.Departamentos)
-                    {
-                        <tr>
-                            <td class="text-center"><a class="btn btn-warning" href="@Url.Action("Form", "Departamento", new { IdDepartamento = departamento.IdDepartamento })"><i class="bi bi-pencil-square"></i></a></td>
-                            <td style="display: none">@departamento.IdDepartamento</td>
-                            <td>@departamento.Nombre</td>
-                            <td style="display: none">@departamento.Area.IdArea</td>
-                            <td>@departamento.Area.Nombre</td>
-                            <td class="text-center"><a class="btn btn-danger" href="@Url.Action("Delete", "Departamento", new { IdDepartamento= departamento.IdDepartamento})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-trash3" style="color: mintcream"></i></a></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-
-
+    </body>
+</html>
