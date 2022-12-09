@@ -1,0 +1,38 @@
+.noneView {
+    display: none
+}
+
+.divLbText {
+    padding: 5px;
+}
+
+.backgroundUser {
+    background-color: mediumseagreen;
+}
+
+.backgroundDep {
+    background-color: gainsboro;
+    color: black !important;
+}
+
+.frmLabel {
+    border-radius: 8px 8px 0 0;
+    width: 80%;
+    text-align: center;
+    margin: 0;
+    color: white;
+    text-transform: uppercase;
+}
+
+.spanIcon {
+    background-color: transparent;
+}
+
+.sizeImag {
+    height: 150px;
+    width: 150px;
+}
+
+.marginButton {
+    margin: 22px;
+}
