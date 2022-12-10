@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿e<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,12 +6,12 @@
     <title>@ViewData["Title"] - PL</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/menu.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PL.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PL</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -25,35 +25,56 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
+                      
                             <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="GetAll">Usuarios</a>
-                        </li>
-                        <li class="nav-item">
+                     
                             <a class="nav-link text-dark" asp-area="" asp-controller="Departamento" asp-action="GetAll">Departamentos</a>
-                        </li>
-                        <li class="nav-item">
+                      
                             <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="GetAll">Productos</a>
-                        </li>
-                        <li class="nav-item">
+                        
                             <a class="nav-link text-dark" asp-area="" asp-controller="VentaProducto" asp-action="GetAll">Venta de productos</a>
-                        </li>
-                        <li class="nav-item">
+
                             <a class="nav-link text-dark" asp-area="" asp-controller="VentaProducto" asp-action="ResumenCompra">Compras <i class="bi bi-cart" style="color: goldenrod;"></i></a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="CargaMasiva" asp-action="UsuarioCargaMasiva">Carga masiva</a>
                         </li>
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+        </nav>*@
+
+        <div class='dashboard'>
+            <div class="dashboard-nav">
+                <header>
+                    <a class="brand-logo"><i class="bi bi-person-circle"></i>
+                        <span>Usuario</span>
+                    </a>
+                </header>
+                <nav class="dashboard-nav-list">
+                    <div class="nav-item-divider"></div>
+                    <a class="dashboard-nav-item" asp-area="" asp-controller="Home" asp-action="Index"> Home</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="bi bi-incognito" style="color: goldenrod;"></i>  Privacy</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="GetAll"><i class="bi bi-person-lines-fill" style="color: goldenrod;"></i> Usuarios</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Departamento" asp-action="GetAll"><i class="bi bi-houses" style="color: goldenrod;"></i> Departamentos</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="GetAll"><i class="bi bi-journal-bookmark-fill" style="color: goldenrod;"></i> Productos</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="VentaProducto" asp-action="GetAll"><i class="bi bi-currency-dollar" style="color: goldenrod;"></i> Venta de productos</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="VentaProducto" asp-action="ResumenCompra"><i class="bi bi-cart-fill" style="color: goldenrod;"></i> Compras</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="CargaMasiva" asp-action="UsuarioCargaMasiva"><i class="bi bi-capslock-fill" style="color: goldenrod;"></i> Carga masiva</a>
+
+                    <div class="nav-item-divider"></div>
+                    <a href="#" class="dashboard-nav-item"><i class="fas fa-sign-out-alt"></i> Logout </a>
+                </nav>
+            </div>
+            <div class='dashboard-app'>
+                <div class='dashboard-content'>
+                    <div class='container'>
+                        <main role="main" class="pb-3">
+                            @RenderBody()
+                        </main>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
 
     <footer class="border-top footer text-muted">
         <div class="container">
